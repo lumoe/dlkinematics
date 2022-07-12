@@ -1,0 +1,29 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+tensorflow-gpu = "*"
+tensorflow = "*"
+numpy = "*"
+lxml = "*"
+PyYAML = "*"
+transformations = "*"
+progressbar2 = "*"
+tensorflow-graphics = "*"
+pandas = "*"
+
+[dev-packages]
+matplotlib = "*"
+pandas = "*"
+ipykernel = "*"
+jupyter = "*"
+sklearn = "*"
+pytest = "*"
+pylint = "*"
+autopep8 = "*"
+ikpy = "*"
+
+[requires]
+python_version = "3.8"

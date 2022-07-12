@@ -1,0 +1,75 @@
+<robot name="simple_robot">
+    <material name="green">
+        <color rgba="0.0 1.0 0.0 1.0"/>
+    </material>
+    <material name="red">
+        <color rgba="1.0 0.0 0.0 1.0"/>
+    </material>
+    <material name="blue">
+        <color rgba="0.0 0.0 1.0 1.0"/>
+    </material>
+
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="0.2 0.2 1.0"/>
+            </geometry>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <material name="red"/>
+        </visual>
+    </link>
+
+    <link name="first_link">
+        <visual>
+            <geometry>
+                <box size="0.2 0.2 1.0"/>
+            </geometry>
+            <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.5"/>
+            <material name="green"/>
+        </visual>
+    </link>
+
+    <link name="second_link">
+        <visual>
+            <geometry>
+                <box size="0.1 0.1 0.1"/>
+            </geometry>
+            <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.6"/>
+            <material name="red"/>
+        </visual>
+    </link>
+
+    <link name="third_link">
+        <visual>
+            <geometry>
+                <box size="0.1 0.1 0.1"/>
+            </geometry>
+            <origin rpy="0.0 0.0 0.0" xyz="0.0 1.0 0.0"/>
+            <material name="blue"/>
+        </visual>
+    </link>
+
+    <joint name="base_to_first" type="revolute">
+        <parent link="base_link"/>
+        <child link="first_link"/>
+        <axis xyz="1.0 0.0 0.0"/>
+        <origin xyz="0.0 0.0 0.5" rpy="2.0 1.0 0.0"/>
+        <limit lower="-1.0" upper="1.0" effort="0.0" velocity="0.0"/>
+    </joint>
+
+    <joint name="first_to_second" type="revolute">
+        <parent link="first_link"/>
+        <child link="second_link"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <origin xyz="0.0 0.0 0.5" rpy="0.0 0.0 1.0"/>
+        <limit lower="-0.4" upper="0.4" effort="0.0" velocity="0.0"/>
+    </joint>
+
+    <joint name="second_to_third" type="revolute">
+        <parent link="second_link"/>
+        <child link="third_link"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <origin xyz="2.0 1.0 .5" rpy="1.0 0.0 1.0"/>
+        <limit lower="-0.78" upper="0.78" effort="0.0" velocity="0.0"/>
+    </joint>
+</robot>

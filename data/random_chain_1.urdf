@@ -1,0 +1,11 @@
+<robot name="chain1">
+  <link name="link0"></link>
+  <link name="link1"></link>
+
+  <joint name="joint0" type="revolute">
+    <parent link="link0"/>
+    <child link="link1"/>
+    <origin xyz="1.53 0.57 1.17" rpy="1.19 -0.72 -0.42"/>
+    <limit lower="-1.7430700511321413" upper="3.0296144739983397" effort="0.0" velocity="0.0"/>
+    <axis xyz="0 0 1"/>
+  </joint></robot>
