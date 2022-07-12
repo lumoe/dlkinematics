@@ -11,6 +11,12 @@ Supported Joint Types:
 - [x] Floating (not coverd by unit tests)
 - [x] Planar (not coverd by unit tests)
 
+## Installation
+
+### Install from source
+
+`$ pip3 install -e git+https://github.com/lumoe/dlkinematics.git@main#egg=DLKinematics`
+
 ## Usage:
 
 ```python
