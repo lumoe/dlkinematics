@@ -17,6 +17,10 @@ Supported Joint Types:
 
 `$ pip3 install -e git+https://github.com/lumoe/dlkinematics.git@main#egg=DLKinematics`
 
+### Install PyPi
+
+_Coming soon_
+
 ## Usage:
 
 ```python
