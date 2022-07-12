@@ -24,8 +24,8 @@ chain = chain_from_urdf_file('data/human.urdf')
 # Create DLKinematics
 dlkinematics = DLKinematics(
    chain,
-   root_link="human_base",
-   last_link="human_spine_2",
+   base_link="human_base",
+   end_link="human_spine_2",
    batch_size=2)
 
 # Joint configuartion

@@ -24,6 +24,7 @@ pytest = "*"
 pylint = "*"
 autopep8 = "*"
 ikpy = "*"
+pipenv-setup = "*"
 
 [requires]
 python_version = "3.8"
