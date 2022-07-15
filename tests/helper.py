@@ -7,7 +7,7 @@ import numpy as np
 
 # Imports for ROS
 from dlkinematics.urdf_parser.urdf import URDF
-from pykdl_utils.kdl_kinematics import KDLKinematics
+from .pykdl_utils.kdl_kinematics import KDLKinematics
 
 # Imports for dlkinematics
 from dlkinematics.urdf import chain_from_urdf_string

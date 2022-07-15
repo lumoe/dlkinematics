@@ -1,27 +1,54 @@
-FROM ros:noetic
+FROM ubuntu
 
-ENV PYTHONPATH="${PYTHONPATH}:/work"
+# ENV PYTHONPATH="${PYTHONPATH}:/work"
+
+ENV TZ=Europe/Vienna
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
      python3 \
-     ros-noetic-urdfdom-py \
-     liburdfdom-tools \
      git \
      vim \
+     build-essential \
+     cmake \
      python3-pip \
      python3-dev \
-     python3-pykdl \
-     libopenexr-dev
+     libopenexr-dev \ 
+     # Install dependencies for orcos_kdl
+     libeigen3-dev\
+     libcppunit-dev \
+     # Install dependencies for python_orocos_kdl
+     python3-psutil \ 
+     python3-future
 
-RUN git clone https://github.com/herzig/hrl-kdl.git
+# https://github.com/orocos/orocos_kinematics_dynamics/blob/release-1.5/orocos_kdl/INSTALL.md#without-catkin
+RUN mkdir /install && \
+     cd /install && \
+     git clone https://github.com/orocos/orocos_kinematics_dynamics && \
+     cd /install/orocos_kinematics_dynamics/ && \
+     git submodule update --init
 
-RUN cd /hrl-kdl/pykdl_utils/ && python3 setup.py install
-RUN cd /hrl-kdl/hrl_geom/ && python3 setup.py install
+# Compile and install orcos_kdl
+# https://github.com/orocos/orocos_kinematics_dynamics/blob/master/python_orocos_kdl/INSTALL.md#without-catkin
+RUN cd /install/orocos_kinematics_dynamics/orocos_kdl && \
+     mkdir build && \ 
+     cd build && \ 
+     cmake .. && \
+     make && \ 
+     make install 
 
-RUN mkdir -p /work
+# Compile and install python_orcos_kdl
+RUN cd /install/orocos_kinematics_dynamics/python_orocos_kdl && \
+     mkdir build && \ 
+     cd build && \ 
+     cmake .. && \
+     make && \ 
+     make install && \
+     ldconfig
 
-RUN pip3 install --upgrade pip
-RUN pip3 install --upgrade tensorflow pytest lxml transformations tensorflow-graphics progressbar2 pandas 
+ADD requirements_dev.txt /requirements_dev.txt
+RUN pip3 install -r /requirements_dev.txt
 
-RUN apt-get install 
 WORKDIR /work

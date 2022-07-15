@@ -17,7 +17,7 @@ Supported Joint Types:
 
 `$ pip3 install -e git+https://github.com/lumoe/dlkinematics.git@main#egg=DLKinematics`
 
-### Install PyPi
+### Install from PyPi
 
 _Coming soon_
 
@@ -75,9 +75,9 @@ The tests use ROS packages to validate the result of the dlkinematics module.
    `$ docker build -t dlkinematics_tests .`
 
 1. Start the container in the root folder of the project:  
-   `$ docker run -v $PWD/:/work:z -it dlkinematics_tests`
+   `$ docker run -it -v $PWD:/work dlkinematics_tests python3 -m pytest`
 
 1. Execute all tests:  
-   `$ python3 -m pytest tests/`  
+   `$ docker run -it -v $PWD:/work dlkinematics_tests python3 -m pytest`  
    Execute only a single testfile:  
-   `$ python3 -m pytest tests/test_prismatic.py`
+   `$ docker run -it -v $PWD:/work dlkinematics_tests python3 -m pytest tests/test_prismatic.py`

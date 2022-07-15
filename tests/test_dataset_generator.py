@@ -3,7 +3,7 @@ import numpy as np
 
 # Imports for ROS
 from dlkinematics.urdf_parser.urdf import URDF
-from pykdl_utils.kdl_kinematics import KDLKinematics  # noqa
+from .pykdl_utils.kdl_kinematics import KDLKinematics  # noqa
 # from evaluation.generate_dataset import generate_dataset
 
 
