@@ -56,14 +56,16 @@ print(tape.gradient(result, thetas))
 
 ```python
 from dlkinematics.training_utils import ForwardKinematics
+from tensorflow import keras
+import tensorflow as tf
 
 model = keras.Sequential()
 
 FK_layer = ForwardKinematics(
-   urdf = 'path/to/urdf',
+   urdf_file = 'path/to/urdf',
    base_link = 'link0',
    end_link = 'linkN',
-   batch_size = 32)
+   batch_size = 2)
 
 model.add(FK_layer)
 # Output shape of FK_layer is (batch_size, 4, 4)
