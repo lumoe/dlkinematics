@@ -22,4 +22,4 @@ jobs:
           docker build -t dlkinematics_tests .
       - name: Run tests
         run: |
-          docker run -it -v $PWD:/work dlkinematics_tests python3 -m pytest
+          docker run -v $PWD:/work dlkinematics_tests python3 -m pytest
