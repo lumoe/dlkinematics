@@ -1,3 +1,5 @@
+[![Tests](https://github.com/lumoe/dlkinematics/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/lumoe/dlkinematics/actions/workflows/main.yml)
+
 # Deep Learning Kinematics
 
 ### Differentiable Forwad Kinematics for TensorFlow and Keras
