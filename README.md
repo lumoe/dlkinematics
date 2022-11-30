@@ -15,13 +15,13 @@ Supported Joint Types:
 
 ## Installation
 
-### Install from source
-
-`$ pip3 install -e git+https://github.com/lumoe/dlkinematics.git@main#egg=DLKinematics`
-
 ### Install from PyPi
 
-_Coming soon_
+`$ pip install dlkinematics`
+
+### Install from source
+
+`$ pip install -e git+https://github.com/lumoe/dlkinematics.git@main#egg=DLKinematics`
 
 ## Usage:
 

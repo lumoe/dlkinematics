@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "dlkinematics"
+version = "0.1.0-rc3"
+description = "Differentiable Forward Kinematics for TensorFlow and Keras based on URDF files"
+authors = ["Lukas Mölschl <lukas@moelschl.com>"]
+readme = "README.md"
+license = "BSD 3-Clause License"
+homepage = "https://github.com/lumoe/dlkinematics"
+repository = "https://github.com/lumoe/dlkinematics"
+keywords = ["tensorflow", "kinematics", "forward-kinematics", "urdf", "robotics"]
+
+
+
+[tool.poetry.dependencies]
+python = ">=3.8, <3.11"
+tensorflow = "^2.2.0"
+tensorflow-graphics = "^2021.12.3"
+numpy = "^1.23.5"
+pyaml = "^21.10.1"
+pyyaml = "^6.0"
+lxml = "^4.9.1"
+transformations = "^2022.9.26"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
