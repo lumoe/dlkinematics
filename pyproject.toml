@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "dlkinematics"
-version = "0.1.0-rc3"
+version = "0.1.0-rc4"
 description = "Differentiable Forward Kinematics for TensorFlow and Keras based on URDF files"
-authors = ["Lukas Mölschl <lukas@moelschl.com>"]
+authors = ["Lukas Mölschl <lukas+pypi@moelschl.com>"]
 readme = "README.md"
 license = "BSD 3-Clause License"
 homepage = "https://github.com/lumoe/dlkinematics"
