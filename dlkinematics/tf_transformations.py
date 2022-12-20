@@ -13,6 +13,25 @@ Matrix([
 """
 
 
+def homogeneous_from_euler(euler_angles):
+    """Create a homogeneous transformation matrix from Euler angles.
+
+    Parameters
+    ----------
+    euler_angles : tf.Tensor
+        A tensor of shape (..., 3) containing the Euler angles.
+
+    Returns
+    -------
+    tf.Tensor
+        A tensor of shape (..., 4, 4) containing the homogeneous transformation
+        matrices.
+    """
+    sin = tf.sin(euler_angles)
+    cos = tf.cos(euler_angles)
+    return tf_homogeneous_transformation(sin, cos, tf.zeros_like(sin))
+
+
 def tf_homogeneous_transformation(sin, cos, translation):
     sx, sy, sz = tf.unstack(sin, num=3, axis=-1)
     cx, cy, cz = tf.unstack(cos, num=3, axis=-1)

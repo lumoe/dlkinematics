@@ -134,15 +134,13 @@ def phi5_loss(y_actual, y_estimated):
     """
         Deviation from the Identity Matrix
     Args:
-        y_actual (Tensor): shape(None, 6), dtype=float32 or float64
+        y_actual (Tensor): shape(None, 4, 4), dtype=float32 or float64
         y_estimated (Tensor): shape(None, 4, 4), dtype=float64 or float64
     Returns:
         Tensor: scalar value. 0 <= error <= 2*sqrt(2)
     """
-    angles_actual = y_actual[:, :3]
     angles_estimated = y_estimated[:, :3, :3]
-    angles_actual = tfg.geometry.transformation.rotation_matrix_3d.from_euler(
-        angles_actual)
+    angles_actual = y_actual[:, :3, :3]
     angles_actual = tf.cast(angles_actual, dtype=tf.float32)
     angles_estimated = tf.cast(angles_estimated, dtype=tf.float32)
     angles_error = tf.math.reduce_euclidean_norm(tf.eye(3, dtype=tf.float32) - tf.linalg.matmul(angles_actual,

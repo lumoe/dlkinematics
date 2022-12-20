@@ -3,13 +3,17 @@ import numpy as np
 from transformations import rotation_matrix, concatenate_matrices
 import tensorflow as tf
 from dlkinematics.training_utils import translation_with_rmse, phi5_loss, phi3_loss, phi4_loss, phi2_loss, get_loss_function
+from dlkinematics.tf_transformations import homogeneous_from_euler
 
 import sys
 
 module = sys.modules['tensorflow_graphics.util.shape']
+
+
 def _get_dim(tensor, axis):
     """Returns dimensionality of a tensor for a given axis."""
     return tf.compat.v1.dimension_value(tensor.shape[axis])
+
 
 module._get_dim = _get_dim
 sys.modules['tensorflow_graphics.util.shape'] = module
@@ -84,27 +88,30 @@ def _get_rotation_matrix(alpha, beta, gamma):
 
 
 def test_phi5_loss_error_to_zero_batch_size_1():
-    rotations = np.array([[1., 2., 3., 0., 0., 0.]], dtype=np.float32)
+    rotations = np.array([[1., 2., 3.]], dtype=np.float32)
+    rotations_matrix = homogeneous_from_euler(rotations)
     homogeneous_transformation = np.array(
         [[[0.41198225, -0.83373765, -0.36763046,  0.],
           [-0.05872664, -0.42691762,  0.90238159,  0.],
           [-0.90929743, -0.35017549, -0.2248451,  0.],
           [0.,  0.,  0.,  1.]]], dtype=np.float32)
-    e = phi5_loss(rotations, homogeneous_transformation)
+    e = phi5_loss(rotations_matrix, homogeneous_transformation)
     assert np.allclose(e, 0., atol=1e-5)
 
 
 def test_phi5_loss_error_to_max_batch_size_1():
-    rotations = np.array([[0., np.pi, 0., 0., 0., 0.]], dtype=np.float32)
+    rotations = np.array([[0., np.pi, 0.]], dtype=np.float32)
+    rotations_matrix = homogeneous_from_euler(rotations)
     homogeneous_transformation = np.array([np.eye(4)])
-    e = phi5_loss(rotations, homogeneous_transformation)
-    print(e)
+    e = phi5_loss(rotations_matrix, homogeneous_transformation)
+    # print(e)
     assert np.allclose(e, 2.*np.sqrt(2), atol=1e-5)
 
 
 def test_phi5_loss_error_to_zero_batch_size_2():
     rotations = np.array(
-        [[1., 2., 3., 0., 0., 0.], [3., 2., 1., 0., 0., 0.]], dtype=np.float32)
+        [[1., 2., 3.], [3., 2., 1.]], dtype=np.float32)
+    rotations_matrix = homogeneous_from_euler(rotations)
     homogeneous_transformation = np.array(
         [[[0.41198225, -0.83373765, -0.36763046,  0.],
           [-0.05872664, -0.42691762,  0.90238159,  0.],
@@ -114,15 +121,17 @@ def test_phi5_loss_error_to_zero_batch_size_2():
           [-0.35017549, -0.42691762, -0.83373765,  0.],
           [-0.90929743, -0.05872664,  0.41198225,  0.],
           [0.,  0.,  0.,  1.]]], dtype=np.float32)
-    e = phi5_loss(rotations, homogeneous_transformation)
+    e = phi5_loss(rotations_matrix, homogeneous_transformation)
     assert np.allclose(e, 0., atol=1e-5)
 
 
 def test_phi5_loss_error_to_max_batch_size_2():
-    rotations = np.array([[0., np.pi, 0., 0., 0., 0.],
-                          [0., 0., np.pi, 0., 0., 0.]], dtype=np.float32)
+    rotations = np.array([[0., np.pi, 0.],
+                          [0., 0., np.pi]], dtype=np.float32)
+    rotations_matrix = homogeneous_from_euler(rotations)
+
     homogeneous_transformation = np.array([np.eye(4)] * 2)
-    e = phi5_loss(rotations, homogeneous_transformation)
+    e = phi5_loss(rotations_matrix, homogeneous_transformation)
     print(e)
     assert np.allclose(e, 2.*np.sqrt(2), atol=1e-5)
 
