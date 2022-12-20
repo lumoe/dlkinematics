@@ -3,6 +3,9 @@ import sys
 
 import numpy as np
 import tensorflow as tf
+
+import tensorflow_graphics.geometry.transformation.euler as tfg_euler
+
 """
 
 Matrix([
@@ -58,3 +61,12 @@ def tf_homogeneous_transformation(sin, cos, translation):
         (tf.shape(sin)[:-1], (4, 4)), axis=-1)
     return tf.reshape(
         transformation_matrix, shape=output_shape)
+
+
+def pose_from_matrix(matrix):
+    """
+    Extract the pose from a homogeneous transformation matrix.
+    """
+    xyz = matrix[..., :3, 3]
+    rpy = tfg_euler.from_rotation_matrix(matrix[:, :3, :3])
+    return tf.concat([xyz, rpy], axis=-1)
