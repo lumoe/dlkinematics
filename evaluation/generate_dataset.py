@@ -6,7 +6,8 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 import os
 import sys
-import progressbar
+# import progressbar
+import tqdm
 
 from dlkinematics.urdf import chain_from_urdf_string  # noqa
 from dlkinematics.dlkinematics import DLKinematics  # noqa
@@ -151,7 +152,8 @@ def generate_dataset(infile, outdir, num_samples, root_link, end_link, save_file
 
     import tensorflow as tf
     tf.executing_eagerly()
-    for _, row in progressbar.progressbar(df.iterrows()):
+    # for _, row in progressbar.progressbar(df.iterrows()):
+    for _, row in tqdm.tqdm(df.iterrows()):
         thetas = row.values
         forward_matrix = dlkin.forward(thetas)
         forward_matrix = np.array(forward_matrix)
