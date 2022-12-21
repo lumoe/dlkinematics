@@ -10,12 +10,16 @@ dlkinematics = DLKinematics(
     chain, base_link="link0", end_link="link3", batch_size=2)
 # Joint configuartion
 thetas = tf.convert_to_tensor([[1., 2., 3.], [3., 4., 6.]], dtype=tf.float32)
-thetas = tf.reshape(thetas, shape=-1)
+
 # Forward pass
 with tf.GradientTape(persistent=True) as tape:
-    tape.watch(thetas)
-fk_res = dlkinematics.forward(thetas)
-p = pose_from_matrix(fk_res)
-thetas = tf.reshape(thetas, shape=(2, 3))
-jacobian = tape.batch_jacobian(p, thetas)
-print(jacobian)
+    tape.watch(thetas)  # this is important to get the gradient with respect to thetas which is not a variable.
+    fk_res = dlkinematics.forward(tf.reshape(thetas, (-1,)))
+    poses = pose_from_matrix(fk_res)
+jacobians = tape.batch_jacobian(poses, thetas)
+
+for theta, pose, jacobian in zip(thetas, poses, jacobians):
+    print(f"Thetas: {theta}")
+    print(f"Pose: (x, y, z, alpha, beta, gamma): {pose}")
+    print(f"Jacobian: {jacobian}")
+

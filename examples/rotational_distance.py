@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-from dlkinematics.training_utils import phi5_loss
+from dlkinematics.training_utils import phi2_loss, phi3_loss, phi4_loss, phi5_loss
 from numpy import cos, sin
 
 
@@ -42,6 +42,9 @@ x, y, z = 1, 2, 3
 # create transformation matrices and also add batch dimension
 target = tf.expand_dims(homogenous_transformation_matrix(x, y, z, 0, np.pi, 0), axis=0)
 result = tf.expand_dims(homogenous_transformation_matrix(x, y, z, 0, 0, 0), axis=0)
-error = phi5_loss(result, target)
 
-print(f"Distance between target and result: {error}")
+print(f"Distance between target and result (phi2): {phi2_loss(result, target)}")
+print(f"Distance between target and result (phi3): {phi3_loss(result, target)}")
+print(f"Distance between target and result (phi4): {phi4_loss(result, target)}")
+print(f"Distance between target and result (phi5): {phi5_loss(result, target)}")
+
