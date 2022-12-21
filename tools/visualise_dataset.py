@@ -15,14 +15,15 @@ import progressbar
 
 from dlkinematics.urdf import chain_from_urdf_file  # noqa
 from dlkinematics.dlkinematics import DLKinematics  # noqa
-from evaluation.generate_dataset import Generator
+from dlkinematics.evaluation.generate_dataset import Generator
 from dlkinematics.training_utils import ForwardKinematics, get_loss_function
 
 
 def visualise(urdf, model, samples, root, tip, batch_size=10):
     modelname = model
     SO3_loss = get_loss_function('rmse', 'rmse')
-    model = keras.models.load_model(model, custom_objects={'ForwardKinematics': ForwardKinematics, 'SO3_loss': SO3_loss})
+    model = keras.models.load_model(model, custom_objects={
+                                    'ForwardKinematics': ForwardKinematics, 'SO3_loss': SO3_loss})
     if 'forward_kinematics' in model.layers[-1].name:
         model.pop()
 
@@ -60,8 +61,6 @@ def visualise(urdf, model, samples, root, tip, batch_size=10):
     angles_estimated = tfg.geometry.transformation.euler.from_rotation_matrix(
         FK_result[:, :3, :3])
 
-
-
     angles = np.reshape(angles, [batch_size*(samples+1), 3])
     rot_x_diff = angles[:, 0].flatten() - angles_estimated[:, 0]
     rot_y_diff = angles[:, 1].flatten() - angles_estimated[:, 1]
@@ -71,20 +70,25 @@ def visualise(urdf, model, samples, root, tip, batch_size=10):
     tra_y = translations[:, :, 1].numpy().flatten()
     tra_z = translations[:, :, 2].numpy().flatten()
 
-    tra_x_diff = translations[:, :, 0].numpy().flatten() - FK_result[:, :3, 3:].reshape(FK_result.shape[0], 3)[:, :1].flatten()
-    tra_y_diff = translations[:, :, 1].numpy().flatten() - FK_result[:, :3, 3:].reshape(FK_result.shape[0], 3)[:, 1:2].flatten()
-    tra_z_diff = translations[:, :, 2].numpy().flatten() - FK_result[:, :3, 3:].reshape(FK_result.shape[0], 3)[:, 2:3].flatten()
+    tra_x_diff = translations[:, :, 0].numpy().flatten(
+    ) - FK_result[:, :3, 3:].reshape(FK_result.shape[0], 3)[:, :1].flatten()
+    tra_y_diff = translations[:, :, 1].numpy().flatten(
+    ) - FK_result[:, :3, 3:].reshape(FK_result.shape[0], 3)[:, 1:2].flatten()
+    tra_z_diff = translations[:, :, 2].numpy().flatten(
+    ) - FK_result[:, :3, 3:].reshape(FK_result.shape[0], 3)[:, 2:3].flatten()
 
-
-        # angles = np.reshape(angles, )
+    # angles = np.reshape(angles, )
     fig = plt.figure()
     ax = fig.gca(projection='3d')
-    ax.quiver(translations[:, :, 0].numpy().flatten(), translations[:, :, 1].numpy().flatten(), translations[:, :, 2].numpy().flatten(), angles[:, 0].flatten(), angles[:, 1].flatten(), angles[:, 2].flatten(), length=0.1, normalize=True)
+    ax.quiver(translations[:, :, 0].numpy().flatten(), translations[:, :, 1].numpy().flatten(), translations[:, :, 2].numpy(
+    ).flatten(), angles[:, 0].flatten(), angles[:, 1].flatten(), angles[:, 2].flatten(), length=0.1, normalize=True)
     ax.quiver(FK_result[:, :3, 3:].reshape(FK_result.shape[0], 3)[:, :1].flatten(),
-            FK_result[:, :3, 3:].reshape(FK_result.shape[0], 3)[:, 1:2].flatten(),
-            FK_result[:, :3, 3:].reshape(FK_result.shape[0], 3)[:, 2:3].flatten(), 
-            angles_estimated[:, 0], angles_estimated.numpy()[:, 1],
-            angles_estimated[:, 2], length=0.1, normalize=True, color='red')
+              FK_result[:, :3, 3:].reshape(FK_result.shape[0], 3)[
+        :, 1:2].flatten(),
+        FK_result[:, :3, 3:].reshape(FK_result.shape[0], 3)[
+        :, 2:3].flatten(),
+        angles_estimated[:, 0], angles_estimated.numpy()[:, 1],
+        angles_estimated[:, 2], length=0.1, normalize=True, color='red')
     plt.show()
     # fig = plt.figure()
     # ax = fig.gca()
@@ -102,13 +106,16 @@ def visualise(urdf, model, samples, root, tip, batch_size=10):
     # plt.show()
 
     rot_x_diff = np.where(rot_x_diff > np.pi, rot_x_diff - np.pi*2, rot_x_diff)
-    rot_x_diff = np.where(rot_x_diff < -np.pi, rot_x_diff + np.pi*2, rot_x_diff)
+    rot_x_diff = np.where(rot_x_diff < -np.pi,
+                          rot_x_diff + np.pi*2, rot_x_diff)
 
     rot_y_diff = np.where(rot_y_diff > np.pi, rot_y_diff - np.pi*2, rot_y_diff)
-    rot_y_diff = np.where(rot_y_diff < -np.pi, rot_y_diff + np.pi*2, rot_y_diff)
+    rot_y_diff = np.where(rot_y_diff < -np.pi,
+                          rot_y_diff + np.pi*2, rot_y_diff)
 
     rot_z_diff = np.where(rot_z_diff > np.pi, rot_z_diff - np.pi*2, rot_z_diff)
-    rot_z_diff = np.where(rot_z_diff < -np.pi, rot_z_diff + np.pi*2, rot_z_diff)
+    rot_z_diff = np.where(rot_z_diff < -np.pi,
+                          rot_z_diff + np.pi*2, rot_z_diff)
 
     rot_x_diff = np.nan_to_num(rot_x_diff)
     rot_y_diff = np.nan_to_num(rot_y_diff)
@@ -133,11 +140,10 @@ def visualise(urdf, model, samples, root, tip, batch_size=10):
     # print(f'Standard Deviation for translation error x: {np.std(tra_x_diff)} => {(np.std(tra_x_diff) / np.amax(tra_x))*100}%')
     # print(f'Standard Deviation for translation error y: {np.std(tra_y_diff)} => {(np.std(tra_y_diff) / np.amax(tra_y))*100}%')
     # print(f'Standard Deviation for translation error z: {np.std(tra_z_diff)} => {(np.std(tra_z_diff) / np.amax(tra_z))*100}%')
-    
+
     # print(f'Max error for translation x: {np.amax(np.abs(tra_x_diff))} => {(np.amax(np.abs(tra_x_diff)) / np.amax(tra_y))*100}%')
     # print(f'Max error for translation y: {np.amax(np.abs(tra_y_diff))} => {(np.amax(np.abs(tra_y_diff)) / np.amax(tra_y))*100}%')
     # print(f'Max error for translation z: {np.amax(np.abs(tra_z_diff))} => {(np.amax(np.abs(tra_z_diff)) / np.amax(tra_z))*100}%')
-
 
     print('\n'*2)
     print(modelname)
@@ -165,7 +171,6 @@ def visualise(urdf, model, samples, root, tip, batch_size=10):
     print(f'{np.amax(np.abs(tra_z_diff)):.2e}')
     print('len', len(tra_x_diff))
 
-
     # fig = plt.figure()
     # ax = fig.gca(projection='3d')
     # ax.scatter(FK_result[:, :, :3, 3:].reshape(FK_result.shape[0], 3)[:, :1].flatten(),
@@ -188,7 +193,7 @@ def visualise(urdf, model, samples, root, tip, batch_size=10):
     plt.ylabel('Samples')
     # plt.savefig(f'./{modelname.split("-")[0]}-hist.pdf')
     plt.savefig(f'{modelname.split("-")[0].split("/")[-1]}-hist.pdf')
-    # plt.show()  
+    # plt.show()
 
     plt.clf()
     plt.cla()
@@ -205,7 +210,6 @@ def visualise(urdf, model, samples, root, tip, batch_size=10):
     # plt.savefig(f'./{modelname.split("-")[0]}-hist.pdf')
     plt.savefig(f'{modelname.split("-")[0].split("/")[-1]}-tra-hist.pdf')
 
-    
     # fig = plt.figure()
     # ax = fig.gca(projection='3d')
     # ax.scatter(angles_estimated.numpy()[:, :, 0].flatten(), angles_estimated.numpy()[:, :, 1].flatten(),
@@ -216,6 +220,7 @@ def visualise(urdf, model, samples, root, tip, batch_size=10):
     #         angles[:, :, 2], label='truth', color='blue')
     # ax.legend()
     # plt.show()
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(

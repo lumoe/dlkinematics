@@ -8,7 +8,7 @@ import random
 import numpy as np
 import tensorflow as tf
 
-from evaluation.generate_dataset import Generator
+from dlkinematics.evaluation.generate_dataset import Generator
 from tqdm import trange
 
 
@@ -19,14 +19,37 @@ class ParamEstimator:
         self.iterations = iterations
         self.dlkin = dlkin
         self.dlkin_new = dlkin_new
-        self.qs = tf.Variable(np.array([0, 0, 0, 0, 0, 0]), dtype=tf.float32)
+
+        self.qs = tf.Variable(tf.reshape(
+            np.array([0, 0, 0, 0, 0, 0]*self.batch_size, dtype=np.float32), (self.batch_size, 6)), dtype=tf.float32)
+
+        for idx, joint in enumerate(self.dlkin_new.urdf.joints):
+            if 'imputed' in joint.name:
+                break
+
+        self.imputed_index = idx
+        self.batch_size = self.dlkin_new.batch_size
+        self.num_joints = self.dlkin_new.num_joints
+
+        self.splite_indices = ([self.imputed_index, (self.num_joints - 1) -
+                                self.imputed_index] * (self.batch_size))
 
     def optimize(self, x):
         with tf.GradientTape() as g:
             g.watch(self.target)
             g.watch(self.qs)
-            # print(self.qs)
-            fk = self.dlkin_new.forward(tf.concat([self.qs, x], axis=0))
+
+            x = tf.cast(x, tf.float32)
+            x = tf.split(x, self.splite_indices, axis=-1)
+
+            # Add joint parameters of imputed universal joint into the list
+            t = [None] * (self.batch_size * 3)
+            t[::3] = x[::2]
+            t[1::3] = self.qs
+            t[2::3] = x[1::2]
+            t = tf.concat(t, axis=-1)
+
+            fk = self.dlkin_new.forward(t)
             loss = l2_norm(self.target - fk)
             loss = tf.reduce_mean(loss)
 
@@ -69,7 +92,6 @@ if __name__ == "__main__":
 
     # orig = dl_kin.forward(thetas_orig)
     # new = dl_kin_new.forward(thetas_new)
-
 
     # print(orig)
     # print(new)

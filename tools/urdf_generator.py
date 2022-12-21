@@ -26,12 +26,14 @@ class RandomizedJoint(object):
         self.axis = f'{self.axis}'[1:-1].replace(',', '')
 
     def to_urdf_str(self, name, parent_id, child_id) -> str:
+        lower = f'lower="{self.lower}"'
+        upper = f'upper="{self.upper}"'
         r = f'''
   <joint name="joint{name}" type="{self.type}">
     <parent link="link{parent_id}"/>
     <child link="link{child_id}"/>
     <origin xyz="{self.xyz}" rpy="{self.rpy}"/>
-    <limit lower="{self.lower}" upper="{self.upper}" effort="0.0" velocity="0.0"/>
+    <limit {lower if self.lower != '' else ''} {upper if self.upper != '' else ''} effort="0.0" velocity="0.0"/>
     <axis xyz="{self.axis}"/>
   </joint>'''
         return r

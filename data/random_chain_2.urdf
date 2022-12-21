@@ -1,51 +1,19 @@
-<robot name="chain6">
+<robot name="chain2">
   <link name="link0"></link>
   <link name="link1"></link>
   <link name="link2"></link>
-  <link name="link3"></link>
-  <link name="link4"></link>
-  <link name="link5"></link>
-  <link name="link6"></link>
 
-  <joint name="joint0" type="prismatic">
+  <joint name="joint0" type="revolute">
     <parent link="link0"/>
     <child link="link1"/>
-    <origin xyz="0.39 -0.00 -0.31" rpy="2.33 -0.20 -0.53"/>
-    <limit lower="-0.2994356447454922" upper="0.5372737659974582" effort="0.0" velocity="0.0"/>
-    <axis xyz="0 0 1"/>
+    <origin xyz="0.67 -0.78 -0.11" rpy="1.56 2.50 -1.87"/>
+    <limit lower="-0.7467977126727877" upper="1.634520136596924" effort="0.0" velocity="0.0"/>
+    <axis xyz="0 1 0"/>
   </joint>
-  <joint name="joint1" type="revolute">
+  <joint name="joint1" type="prismatic">
     <parent link="link1"/>
     <child link="link2"/>
-    <origin xyz="-0.49 0.40 -0.14" rpy="0.90 2.11 -0.36"/>
-    <limit lower="-2.1177220741313763" upper="1.7734052709900225" effort="0.0" velocity="0.0"/>
-    <axis xyz="0 0 1"/>
-  </joint>
-  <joint name="joint2" type="prismatic">
-    <parent link="link2"/>
-    <child link="link3"/>
-    <origin xyz="0.85 1.74 -1.94" rpy="-0.36 2.01 1.75"/>
-    <limit lower="-0.455187985742597" upper="0.917448702457113" effort="0.0" velocity="0.0"/>
-    <axis xyz="1 0 0"/>
-  </joint>
-  <joint name="joint3" type="prismatic">
-    <parent link="link3"/>
-    <child link="link4"/>
-    <origin xyz="0.96 -0.72 1.63" rpy="-0.11 -1.67 1.39"/>
-    <limit lower="-0.12750429690144938" upper="0.8043486638569927" effort="0.0" velocity="0.0"/>
-    <axis xyz="0 0 1"/>
-  </joint>
-  <joint name="joint4" type="revolute">
-    <parent link="link4"/>
-    <child link="link5"/>
-    <origin xyz="0.36 -1.91 -1.46" rpy="-0.07 -1.53 -1.29"/>
-    <limit lower="-0.9248061433916913" upper="2.8609634962990955" effort="0.0" velocity="0.0"/>
-    <axis xyz="1 0 0"/>
-  </joint>
-  <joint name="joint5" type="revolute">
-    <parent link="link5"/>
-    <child link="link6"/>
-    <origin xyz="-1.92 -0.25 -0.79" rpy="-0.40 1.48 -2.87"/>
-    <limit lower="-1.544498378923074" upper="0.3616927851895262" effort="0.0" velocity="0.0"/>
+    <origin xyz="1.61 -1.40 -0.73" rpy="0.21 -0.01 0.03"/>
+    <limit lower="-0.409708700339666" upper="0.19606005240497826" effort="0.0" velocity="0.0"/>
     <axis xyz="0 0 1"/>
   </joint></robot>

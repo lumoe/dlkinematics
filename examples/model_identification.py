@@ -6,8 +6,8 @@ from dlkinematics.dlkinematics import DLKinematics
 from dlkinematics.tf_transformations import pose_from_matrix
 from dlkinematics.training_utils import subsitute_link_with_joint
 from dlkinematics.urdf import chain_from_urdf_file
-from evaluation.estimate_model_params import ParamEstimator
-from evaluation.generate_dataset import Generator
+from dlkinematics.evaluation.estimate_model_params import ParamEstimator
+from dlkinematics.evaluation.generate_dataset import Generator
 
 # Loading kinematic chain ..
 path_to_urdf = "data/random_chain_6.urdf"
@@ -18,13 +18,13 @@ target_link = "link3"
 batch_size = 128
 num_samples = 50
 
-dl_kin = DLKinematics(chain, root, last)
+dl_kin = DLKinematics(chain, root, last, batch_size=batch_size)
 
 # Replace link with universal joint
 new_chain = subsitute_link_with_joint(
     urdf=dl_kin.urdf, target_link=target_link, root=root, last=last
 )
-dl_kin_new = DLKinematics(new_chain, root, last)
+dl_kin_new = DLKinematics(new_chain, root, last, batch_size=batch_size)
 
 sample_generator = Generator(
     urdf_file=path_to_urdf, root_link=root, end_link=last, batch_size=batch_size
