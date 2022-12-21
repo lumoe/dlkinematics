@@ -6,7 +6,6 @@ from dlkinematics.training_utils import subsitute_link_with_joint
 
 import random
 import numpy as np
-import pandas as pd
 import tensorflow as tf
 
 from evaluation.generate_dataset import Generator
@@ -49,48 +48,49 @@ class ParamEstimator:
         return self.qs, pbar.n
 
 
-chain = chain_from_urdf_file('data/iis_robot.urdf')
-root, last = 'world', 'head_realsense_camera_color_optical_frame'
+if __name__ == "__main__":
+    chain = chain_from_urdf_file('data/iis_robot.urdf')
+    root, last = 'world', 'head_realsense_camera_color_optical_frame'
 
-dl_kin = DLKinematics(chain, root, last)
+    dl_kin = DLKinematics(chain, root, last)
 
-new_chain = subsitute_link_with_joint(
-    urdf=dl_kin.urdf,
-    target_link='base_link',
-    root=root,
-    last=last
-)
+    new_chain = subsitute_link_with_joint(
+        urdf=dl_kin.urdf,
+        target_link='base_link',
+        root=root,
+        last=last
+    )
 
-dl_kin_new = DLKinematics(new_chain, root, last)
+    dl_kin_new = DLKinematics(new_chain, root, last)
 
-thetas_orig = [1, 2, 3, 4]
-thetas_new = [0, 0, 0, -0.169, 0.0, 0.437, 1, 2, 3, 4]
-# thetas_new = [0, 0, 0, 0, 0, 0, 1, 2, 3, 4]
+    thetas_orig = [1, 2, 3, 4]
+    thetas_new = [0, 0, 0, -0.169, 0.0, 0.437, 1, 2, 3, 4]
+    # thetas_new = [0, 0, 0, 0, 0, 0, 1, 2, 3, 4]
 
-# orig = dl_kin.forward(thetas_orig)
-# new = dl_kin_new.forward(thetas_new)
+    # orig = dl_kin.forward(thetas_orig)
+    # new = dl_kin_new.forward(thetas_new)
 
 
-# print(orig)
-# print(new)
-# print(np.allclose(orig, new))
+    # print(orig)
+    # print(new)
+    # print(np.allclose(orig, new))
 
-expected = np.array([0, 0, 0, -0.169, 0.0, 0.437])
+    expected = np.array([0, 0, 0, -0.169, 0.0, 0.437])
 
-batch_size = 1
-num_samples = 100
+    batch_size = 1
+    num_samples = 100
 
-sample_generator = Generator(
-    urdf_file='data/iis_robot.urdf',
-    root_link=root,
-    end_link=last,
-    batch_size=batch_size)
+    sample_generator = Generator(
+        urdf_file='data/iis_robot.urdf',
+        root_link=root,
+        end_link=last,
+        batch_size=batch_size)
 
-estimator = ParamEstimator(dl_kin, dl_kin_new, batch_size=batch_size)
+    estimator = ParamEstimator(dl_kin, dl_kin_new, batch_size=batch_size)
 
-for idx, q_sample in enumerate(sample_generator.joint_samples()):
-    res, iterations = estimator.step(q_sample.flatten())
-    print(f'{np.round(expected, 3)}')
-    print(f'{np.round(estimator.qs.numpy(), 3)}')
-    if idx % num_samples == 0:
-        break
+    for idx, q_sample in enumerate(sample_generator.joint_samples()):
+        res, iterations = estimator.step(q_sample.flatten())
+        print(f'{np.round(expected, 3)}')
+        print(f'{np.round(estimator.qs.numpy(), 3)}')
+        if idx % num_samples == 0:
+            break
