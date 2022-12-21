@@ -1,7 +1,8 @@
 import numpy as np
 import tensorflow as tf
-from dlkinematics.training_utils import phi2_loss, phi3_loss, phi4_loss, phi5_loss
 from numpy import cos, sin
+
+from dlkinematics.training_utils import phi2_loss, phi3_loss, phi4_loss, phi5_loss
 
 
 def homogenous_transformation_matrix(x, y, z, phi_x, phi_y, phi_z):
@@ -47,4 +48,3 @@ print(f"Distance between target and result (phi2): {phi2_loss(result, target)}")
 print(f"Distance between target and result (phi3): {phi3_loss(result, target)}")
 print(f"Distance between target and result (phi4): {phi4_loss(result, target)}")
 print(f"Distance between target and result (phi5): {phi5_loss(result, target)}")
-
