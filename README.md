@@ -10,7 +10,7 @@ Supported Joint Types:
 - [x] Revolute
 - [x] Continious
 - [x] Prismatic
-- [x] Floating (not coverd by unit tests)
+- [x] Floating - 6-DoF joint (not coverd by unit tests)
 - [x] Planar (not coverd by unit tests)
 
 ## Installation
@@ -18,10 +18,6 @@ Supported Joint Types:
 ### Install from PyPi
 
 `$ pip install dlkinematics`
-
-### Install from source
-
-`$ pip install -e git+https://github.com/lumoe/dlkinematics.git@main#egg=DLKinematics`
 
 ## Usage:
 

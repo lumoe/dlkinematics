@@ -40,11 +40,21 @@ def homogenous_transformation_matrix(x, y, z, phi_x, phi_y, phi_z):
 
 
 x, y, z = 1, 2, 3
-# create transformation matrices and also add batch dimension
-target = tf.expand_dims(homogenous_transformation_matrix(x, y, z, 0, np.pi, 0), axis=0)
-result = tf.expand_dims(homogenous_transformation_matrix(x, y, z, 0, 0, 0), axis=0)
+phi_x, phi_y, phi_z = 0, np.pi, 0
 
-print(f"Distance between target and result (phi2): {phi2_loss(result, target)}")
-print(f"Distance between target and result (phi3): {phi3_loss(result, target)}")
-print(f"Distance between target and result (phi4): {phi4_loss(result, target)}")
-print(f"Distance between target and result (phi5): {phi5_loss(result, target)}")
+# create transformation matrices and also add batch dimension
+target = tf.expand_dims(
+    homogenous_transformation_matrix(x, y, z, phi_x, phi_y, phi_z), axis=0)
+target_phis = tf.expand_dims(tf.convert_to_tensor(
+    [phi_x, phi_y, phi_z, 0, 0, 0]), axis=0)
+result = tf.expand_dims(
+    homogenous_transformation_matrix(x, y, z, 0, 0, 0), axis=0)
+
+print(
+    f"Distance between target and result (phi2): {phi2_loss(target_phis, result)}")
+print(
+    f"Distance between target and result (phi3): {phi3_loss(target_phis, result)}")
+print(
+    f"Distance between target and result (phi4): {phi4_loss(target_phis, result)}")
+print(
+    f"Distance between target and result (phi5): {phi5_loss(target, result)}")
