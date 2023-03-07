@@ -8,7 +8,7 @@ Supported Joint Types:
 
 - [x] Fixed
 - [x] Revolute
-- [x] Continious
+- [x] Continuous
 - [x] Prismatic
 - [x] Floating - 6-DoF joint (not coverd by unit tests)
 - [x] Planar (not coverd by unit tests)
